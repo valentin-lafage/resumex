@@ -1,0 +1,64 @@
+{
+  "contact": {
+    "name": "Charlie Simms",
+    "email": "charlie.simms@test.com",
+    "phone": "+1234567890"
+  },
+  "educations": [
+    {
+      "degree": "MSc Computer Science",
+      "institution": "University of Baird",
+      "year": 1992,
+      "achievements": [
+        "\\textit{Has driven a Ferrari}"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "position": "Software Engineer",
+      "company": {
+        "name": "Ampere",
+        "location": "Toulouse, France"
+      },
+      "achievements": [
+        "Has taught a woman to dance the tango"
+      ],
+      "start_date": "2022-10-04",
+      "end_date": "2025-11-06"
+    }
+  ],
+  "skills": [
+    {
+      "type": "technical",
+      "name": "Python",
+      "level": "Advanced"
+    },
+    {
+      "type": "technical",
+      "name": "Java",
+      "level": "Intermediate"
+    },
+    {
+      "type": "technical",
+      "name": "Tango",
+      "level": "Advanced"
+    },
+    {
+      "type": "technical",
+      "name": "Ferrari Driving",
+      "level": "Intermediate"
+    },
+    {
+      "type": "language",
+      "name": "English",
+      "level": "Fluent"
+    },
+    {
+      "type": "language",
+      "name": "French",
+      "level": "Native"
+    }
+  ],
+  "language": "french"
+}
