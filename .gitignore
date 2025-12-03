@@ -1,0 +1,35 @@
+
+## caches ##
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+## dist ##
+
+build/
+*.egg
+*.egg-info/
+eggs/
+.eggs/
+
+## env ##
+
+.env
+.venv
+env/
+venv/
+ENV/
+
+## logs ##
+
+logs/
+
+## tmp ##
+
+*.swp
+*.bak
+*.tmp
+*.temp
+.pytest_cache/
