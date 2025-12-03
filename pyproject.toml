@@ -14,11 +14,15 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
+    "platformdirs (>=4.3.7,<5.0.0)"
 ]
 
 [project.urls]
 repository = "https://github.com/valentin-lafage/resumex"
 "Bug Tracker" = "https://github.com/valentin-lafage/resumex/issues"
+
+[tool.poetry.plugins."console_scripts"]
+resumex = "resumex.main:main"
 
 [tool.poetry]
 packages = [{include = "resumex", from = "src"}]
