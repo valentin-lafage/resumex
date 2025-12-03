@@ -1,5 +1,6 @@
-from platformdirs import user_log_dir
+from platformdirs import user_log_dir, user_data_dir
 from pathlib import Path
+from importlib.resources import files
 
 
 class PkgInfo:
@@ -8,5 +9,17 @@ class PkgInfo:
 
 
 class Paths:
-    CONFIG = Path(__file__).parent
-    LOGS = Path(user_log_dir(PkgInfo.NAME, PkgInfo.AUTHOR))
+    # - Linux: ~/.local/state/resumex/logs
+    LOGS_DIR = Path(user_log_dir(PkgInfo.NAME, PkgInfo.AUTHOR))
+    # - Linux: ~/.local/share/resumex
+    DATA_DIR = Path(user_data_dir(PkgInfo.NAME, PkgInfo.AUTHOR))
+
+    ROOT = Path(files("resumex"))
+
+    # Paths relative to the package
+    CONFIG = ROOT.joinpath("config")
+    TEMPLATES = ROOT.joinpath("templates")
+
+    # Paths relative to the user data directory
+    JSON = DATA_DIR.joinpath("resume.json")
+    OUT_DIR = DATA_DIR.joinpath("out")

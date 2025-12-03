@@ -1,5 +1,5 @@
 [flake8]
-ignore = F401, W503
+ignore = F401, W503, E266
 max-line-length = 88
 docstring-convention = google
 exclude=

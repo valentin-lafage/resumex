@@ -14,7 +14,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-    "platformdirs (>=4.3.7,<5.0.0)"
+    "platformdirs (>=4.3.7,<5.0.0)",
+    "jinja2 (>=3.1.6,<4.0.0)",
+    "pydantic[email] (>=2.11.4,<3.0.0)",
 ]
 
 [project.urls]
@@ -34,6 +36,13 @@ optional = true
 black = "^25.1.0"
 flake8 = "^7.2.0"
 pre-commit = "^4.2.0"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.5"
+pytest-mock = "^3.14.0"
 
 [tool.black]
 target-version = ['py39']

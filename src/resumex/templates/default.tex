@@ -1,0 +1,121 @@
+\documentclass[a4paper,12pt]{article}
+
+
+% Emphasis
+\usepackage[normalem]{ulem}
+% Encoding
+\usepackage[utf8]{inputenc}
+% Language
+\usepackage[english,french]{babel}
+% Lists
+\usepackage{enumitem}
+% Margins
+\usepackage[margin=1in]{geometry}
+% Titles
+\usepackage{titlesec}
+
+
+% PDF encoding
+\pdfgentounicode=1
+
+% Lists
+\setlist[itemize]{
+  % Use bullet symbol
+  label=\textbullet,
+  % No indentation
+  noitemsep,
+  left=0pt .. \parindent
+}
+
+% No page numbering
+\pagestyle{empty}
+% No section numbering
+\setcounter{secnumdepth}{0}
+
+% No spacing on subsections
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+
+% Titles
+\titleformat{\section}
+{\large\bfseries\uppercase}
+% No label
+{}
+% No spacing between label and title
+{0pt}
+% No extra formatting before title
+{}
+% Horizontal rule beneath the title
+[\titlerule]
+
+% Subsubsection titles
+\titleformat*{\subsubsection}{\large\itshape}
+
+
+% ================================= %
+%               START               %
+% ================================= %
+
+\begin{document}
+
+
+% --- Header ---
+
+\begin{center}
+    \begin{minipage}{0.5\textwidth}
+        {\Huge\bfseries {{ cv.contact.name }}}
+        \medskip
+    \end{minipage} \hfill
+    \begin{minipage}{0.4\textwidth}
+        \raggedleft
+        Email: {{ cv.contact.email }} \\
+        Phone: {{ cv.contact.phone }} \\
+    \end{minipage}
+\end{center}
+
+
+% --- Education ---
+
+\section{Education}
+{%- for edu in cv.educations %}
+\subsection{ {{- edu.institution }} $|$ {\normalfont\itshape {{ edu.degree }}} \hfill {{ edu.year }} }
+\begin{itemize}
+	{%- for achievement in edu.achievements %}
+		\item {{ achievement }}
+	{%- endfor %}
+\end{itemize}
+{%- endfor %}
+
+
+% --- Experience ---
+
+\section{Experience}
+{%- for xp in cv.experiences %}
+\subsection{ {{- xp.company.name }} \hfill {{ xp.company.location }} }
+\subsubsection{ {{- xp.position }} \hfill {{ xp.start_date }} - {{ xp.end_date }} }
+\begin{itemize}
+	{%- for achievement in xp.achievements %}
+		\item {{ achievement }}
+	{%- endfor %}
+\end{itemize}
+{%- endfor %}
+
+
+% --- Skills ---
+
+\section{Skills}
+\begin{description}[itemsep=0pt]
+
+  {%- set tech = cv.skills | selectattr('type', 'equalto', 'technical') | list -%}
+  {%- set lang = cv.skills | selectattr('type', 'equalto', 'language') | list -%}
+
+  {%- if tech %}
+    \item[Technical] {{ tech[:5] | join(", ") }}
+  {%- endif %}
+
+  {%- if lang %}
+    \item[Languages] {{ lang | join(" / ") }}
+  {%- endif %}
+\end{description}
+
+\end{document}
