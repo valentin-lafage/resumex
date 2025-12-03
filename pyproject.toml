@@ -1,0 +1,29 @@
+[project]
+name = "resumex"
+version = "0.1.0"
+description = "Make your resume from LaTeX templates"
+authors = [
+    {name = "Valentin Lafage",email = "vlafage.dev@free.fr"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = [ "resume", "cv", "python", "latex" ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+]
+
+[project.urls]
+repository = "https://github.com/valentin-lafage/resumex"
+"Bug Tracker" = "https://github.com/valentin-lafage/resumex/issues"
+
+[tool.poetry]
+packages = [{include = "resumex", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
