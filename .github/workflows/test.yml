@@ -1,0 +1,16 @@
+name: Unit Tests
+
+on: [push]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v5
+    - name: Install
+      uses: ./.github/actions/install
+      with:
+        dependency-groups: test
+    - name: Test
+      run: poetry run pytest -vv

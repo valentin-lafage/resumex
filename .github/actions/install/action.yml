@@ -1,0 +1,50 @@
+name: Install Project
+
+inputs:
+  python-version:
+    required: false
+    default: "3.13"
+  dependency-groups:
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+            ## Python ##
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v6
+      id: setup-python
+      with:
+        python-version: ${{ inputs.python-version }}
+            ## Poetry ##
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        virtualenvs-path: .venv
+        installer-parallel: true
+            ## Cache ##
+    - name: Restore Virtual Environment
+      id: restore-venv
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/.venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+            ## Deps ##
+    - name: Install Dependencies
+      if: steps.restore-venv.outputs.cache-hit != 'true'
+      run: |
+        cmd="poetry install -n --no-root"
+        if [[ -n "$EXTRAS" ]]; then
+          cmd="$cmd --with $EXTRAS"
+        fi
+        eval "$cmd"
+      shell: bash
+      env:
+        EXTRAS: ${{ inputs.dependency-groups }}
+            ## Install ##
+    - name: Install Project
+      run: poetry install -n
+      shell: bash
