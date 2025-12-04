@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = [ "resume", "cv", "python", "latex" ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -45,7 +45,7 @@ pytest = "^8.3.5"
 pytest-mock = "^3.14.0"
 
 [tool.black]
-target-version = ['py39']
+target-version = ['py310']
 line-length = 88
 skip-string-normalization = false
 skip-magic-trailing-comma = false
