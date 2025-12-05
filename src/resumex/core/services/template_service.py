@@ -17,6 +17,9 @@ class TemplateService:
         self._file_service = file_service
         self._env = Environment(loader=FileSystemLoader(Paths.TEMPLATES))
 
+    def ls(self) -> list[str]:
+        return Template.all()
+
     def render(self, template: Template = Template.DEFAULT):
         resume = Resume.model_validate_json(self._file_service.read_json())
         self._logger.info(f"Rendering template '{template.value}'")

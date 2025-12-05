@@ -2,14 +2,18 @@ import os
 import logging
 import logging.config
 
+import resumex.core.cli.template
+
 from resumex.config import Paths
+from resumex.core.cli import cli
 from resumex.core.di import ServiceProvider
+from resumex.templates.template import Template
 
 
 def main():
     set_up_logging()
     init_dependency_providers()
-    ServiceProvider.get_instance().template_service.render()
+    cli()
 
 
 def set_up_logging():
