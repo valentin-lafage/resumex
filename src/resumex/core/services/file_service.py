@@ -1,6 +1,7 @@
 import shutil
 import logging
 
+from click import File
 from pathlib import Path
 
 from resumex.config.constants import Paths
@@ -21,11 +22,14 @@ class FileService:
     def cleanup_dir(self, dir: Path):
         if dir.exists() and dir.is_dir():
             shutil.rmtree(dir)
-            self._logger.info(f"Removed directory: {dir}")
+            self._logger.debug(f"Removed directory: {dir}")
         dir.mkdir(parents=True, exist_ok=True)
 
     def read_json(self):
         return self.read(Paths.JSON)
+
+    def write_json(self, json: File):
+        self.copy(json, Paths.JSON)
 
     def read(self, file: Path) -> str:
         with open(file, "r") as f:
@@ -34,3 +38,10 @@ class FileService:
     def write(self, content: str, destination: Path):
         with open(destination, "w") as f:
             f.write(content)
+
+    def copy(self, source: File, destinationt: Path):
+        with open(destinationt, "wb") as dst:
+            shutil.copyfileobj(source, dst)
+
+    def get_extension(self, file: File) -> str:
+        return Path(file.name).suffix
