@@ -18,7 +18,7 @@ def ls(provider):
 @click.pass_obj
 def render(provider, template: str, json: click.File):
     if json is not None:
-        provider.file_service.write_json(json)
+        provider.json_service.write(json)
 
     if template.isnumeric():
         try:

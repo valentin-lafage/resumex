@@ -25,12 +25,6 @@ class FileService:
             self._logger.debug(f"Removed directory: {dir}")
         dir.mkdir(parents=True, exist_ok=True)
 
-    def read_json(self):
-        return self.read(Paths.JSON)
-
-    def write_json(self, json: File):
-        self.copy(json, Paths.JSON)
-
     def read(self, file: Path) -> str:
         with open(file, "r") as f:
             return f.read()
@@ -39,8 +33,12 @@ class FileService:
         with open(destination, "w") as f:
             f.write(content)
 
-    def copy(self, source: File, destinationt: Path):
-        with open(destinationt, "wb") as dst:
+    def copy(self, source: Path | File, destination: Path):
+        if isinstance(source, Path):
+            shutil.copy(source, destination)
+            return
+
+        with open(destination, "wb") as dst:
             shutil.copyfileobj(source, dst)
 
     def get_extension(self, file: File) -> str:
