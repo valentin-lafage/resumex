@@ -1,12 +1,13 @@
 import click
 
 from resumex.core.cli import cli
+from resumex.core.di import ServiceProvider
 from resumex.templates.template import Template
 
 
 @cli.command(help="List available templates")
 @click.pass_obj
-def ls(provider):
+def ls(provider: ServiceProvider):
     templates = provider.template_service.ls()
     for i, item in enumerate(templates):
         click.echo(f"[{i}] — {click.style(item, bold=True)}")
@@ -16,7 +17,8 @@ def ls(provider):
 @click.argument("template")
 @click.option("--json", type=click.File("rb"))
 @click.pass_obj
-def render(provider, template: str, json: click.File):
+def render(provider: ServiceProvider, template: str, json: click.File):
+    provider.backup_service.backup()
     if json is not None:
         provider.json_service.write(json)
 

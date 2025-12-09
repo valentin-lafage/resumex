@@ -12,17 +12,19 @@ class FileService:
     TAG = "FileService"
 
     def __init__(self):
-        self._logger = logging.getLogger(FileService.TAG)
+        self.logger = logging.getLogger(FileService.TAG)
         self.create_data_dir()
-        self.cleanup_dir(Paths.OUT_DIR)
 
     def create_data_dir(self):
         Paths.DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    def cleanup_dir(self, dir: Path):
+    def rmdir(self, dir: Path):
         if dir.exists() and dir.is_dir():
             shutil.rmtree(dir)
-            self._logger.debug(f"Removed directory: {dir}")
+            self.logger.debug(f"Removed directory: {dir}")
+
+    def cleanup_dir(self, dir: Path):
+        self.rmdir(dir)
         dir.mkdir(parents=True, exist_ok=True)
 
     def read(self, file: Path) -> str:

@@ -13,18 +13,19 @@ class TemplateService:
     TAG = "TemplateService"
 
     def __init__(self, file_service: FileService, json_service: JsonService):
-        self._logger = logging.getLogger(TemplateService.TAG)
-        self._file_service = file_service
-        self._json_service = json_service
-        self._env = Environment(loader=FileSystemLoader(Paths.TEMPLATES))
+        self.logger = logging.getLogger(TemplateService.TAG)
+        self.file_service = file_service
+        self.json_service = json_service
+        self.env = Environment(loader=FileSystemLoader(Paths.TEMPLATES))
 
     def ls(self) -> list[str]:
         return Template.all()
 
     def render(self, template: Template = Template.DEFAULT):
-        resume = Resume.model_validate_json(self._json_service.read())
-        self._logger.info(f"Rendering template '{template.value}'")
-        rendered = template.get(self._env).render(cv=resume)
+        self.file_service.cleanup_dir(Paths.OUT_DIR)
+        resume = Resume.model_validate_json(self.json_service.read())
+        self.logger.info(f"Rendering template '{template.value}'")
+        rendered = template.get(self.env).render(cv=resume)
         out_path = template.get_out_path()
-        self._file_service.write(rendered, out_path)
-        self._logger.info(f"Resume is available at {out_path}")
+        self.file_service.write(rendered, out_path)
+        self.logger.info(f"Resume is available at {out_path}")
