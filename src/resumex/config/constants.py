@@ -21,5 +21,6 @@ class Paths:
     TEMPLATES = ROOT.joinpath("templates")
 
     # Paths relative to the user data directory
+    BACKUP_DIR = DATA_DIR.joinpath("backup")
     JSON = DATA_DIR.joinpath("resume.json")
     OUT_DIR = DATA_DIR.joinpath("out")

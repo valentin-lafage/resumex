@@ -11,11 +11,11 @@ class JsonService:
     TAG = "JsonService"
 
     def __init__(self, file_service: FileService):
-        self._logger = logging.getLogger(JsonService.TAG)
-        self._file_service = file_service
+        self.logger = logging.getLogger(JsonService.TAG)
+        self.file_service = file_service
 
     def read(self):
-        return self._file_service.read(Paths.JSON)
+        return self.file_service.read(Paths.JSON)
 
     def write(self, json: File):
-        self._file_service.copy(json, Paths.JSON)
+        self.file_service.copy(json, Paths.JSON)
