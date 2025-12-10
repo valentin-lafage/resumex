@@ -1,1 +1,1 @@
-from .paths import FIXTURES
+from .constants import Paths, TestFile

@@ -1,20 +1,31 @@
 import pytest
 
+from pathlib import Path
 from unittest.mock import MagicMock
 
-from tests.config import FIXTURES
+from tests.config import Paths
 from resumex.core.services import FileService, JsonService
 
 
-@pytest.fixture
-def sample_resume_json():
-    path = FIXTURES.joinpath("resume.json")
-    return path.read_text()
+@pytest.fixture(scope="session")
+def seed(tmp_path_factory) -> Path:
+    tmp_dir = tmp_path_factory.mktemp("seed")
+
+    for src in Paths.SEED.iterdir():
+        dst = tmp_dir.joinpath(src.name)
+        dst.write_text(src.read_text())
+
+    return tmp_dir
 
 
 @pytest.fixture
-def default_result():
-    path = FIXTURES.joinpath("default.tex")
+def sample_resume_json() -> str:
+    return Paths.RESUME_JSON.read_text()
+
+
+@pytest.fixture
+def default_result() -> str:
+    path = Paths.DEFAULT_TEX
     return path.read_text().rstrip("\n")
 
 
