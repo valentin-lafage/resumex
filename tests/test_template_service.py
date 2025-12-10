@@ -1,23 +1,13 @@
-from resumex.core.services import FileService, JsonService, TemplateService
+from resumex.core.services import TemplateService
 from resumex.templates import Template
 
 
-def test_template_service(tmp_path, sample_resume_json, default_result, mocker):
+def test_default_rendering(
+    tmp_path, json_service_mock, default_result, file_service_mock, mocker
+):
     out_path = tmp_path.joinpath("default.tex")
 
-    ## FileService ##
-
-    mock_file_service = mocker.Mock(spec=FileService)
-    mock_file_service.write.side_effect = lambda content, path: path.write_text(content)
-
-    ## JsonService ##
-
-    mock_json_service = mocker.Mock(spec=JsonService)
-    mock_json_service.read.return_value = sample_resume_json
-
-    ## TemplateService ##
-
-    service = TemplateService(mock_file_service, mock_json_service)
+    service = TemplateService(file_service_mock, json_service_mock)
     mocker.patch.object(Template.DEFAULT, "get_out_path", return_value=out_path)
     service.render(template=Template.DEFAULT)
 
