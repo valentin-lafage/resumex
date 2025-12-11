@@ -13,14 +13,22 @@ class BackupService:
 
     SUPPORTED_FILE_EXT = [".json", ".tex"]
 
+    @property
+    def src(self) -> Path:
+        return Paths.DATA_DIR
+
+    @property
+    def dst(self) -> Path:
+        return Paths.BACKUP_DIR
+
     def __init__(self, file_service: FileService):
         self.logger = logging.getLogger(BackupService.TAG)
         self.file_service = file_service
-        if Paths.BACKUP_DIR.exists():
+        if self.dst.exists():
             self.cleanup()
 
-    def get_files_to_backup(self, base: Path = Paths.DATA_DIR) -> list[Backup]:
-        return [Backup(p) for p in base.rglob("*") if self.should_backup(p)]
+    def get_files_to_backup(self) -> list[Backup]:
+        return [Backup(p) for p in self.src.rglob("*") if self.should_backup(p)]
 
     def should_backup(self, src: Path) -> bool:
         return src.is_file() and src.suffix in BackupService.SUPPORTED_FILE_EXT
@@ -37,12 +45,12 @@ class BackupService:
             self.file_service.copy(src, dst)
 
     def create_backup_dir(self) -> Backup:
-        dir_path = Paths.BACKUP_DIR.joinpath(Backup.construct_dirname())
+        dir_path = self.dst.joinpath(Backup.construct_dirname())
         dir_path.mkdir(parents=True)
         return Backup(dir_path)
 
     def get_backups(self) -> list[Backup]:
-        return [Backup(p) for p in Paths.BACKUP_DIR.iterdir() if p.is_dir()]
+        return [Backup(p) for p in self.dst.iterdir() if p.is_dir()]
 
     def get_old_backups(self) -> list[Backup]:
         return [b for b in self.get_backups() if b.is_too_old()]

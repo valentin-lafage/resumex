@@ -19,6 +19,10 @@ class Backup:
     def time(self) -> int:
         return self.path.stem.removeprefix(Backup.DIRNAME_PREFIX)
 
+    @property
+    def content(self) -> list[Path]:
+        return list(self.path.iterdir())
+
     def is_too_old(self) -> bool:
         return self.last_modified < (dt.now() - Backup.RETENTION_TIME)
 
