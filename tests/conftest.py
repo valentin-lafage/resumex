@@ -1,7 +1,6 @@
 import pytest
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from tests.config import Paths
 from resumex.core.services import (
@@ -35,22 +34,27 @@ def default_result() -> str:
 
 
 @pytest.fixture
-def backup_service(seed, mocker) -> BackupService:
+def backup_service(file_service, seed, mocker) -> BackupService:
     cls = "resumex.core.services.BackupService"
     src = seed
     dst = seed.joinpath("backup")
     mocker.patch(f"{cls}.src", return_value=src, new_callable=mocker.PropertyMock)
     mocker.patch(f"{cls}.dst", return_value=dst, new_callable=mocker.PropertyMock)
-    return BackupService(FileService())
+    return BackupService(file_service)
 
 
 @pytest.fixture
-def template_service(json_service_mock):
-    return TemplateService(FileService(), json_service_mock)
+def file_service():
+    return FileService()
 
 
 @pytest.fixture
-def json_service_mock(sample_resume_json, mocker) -> MagicMock:
-    mock = mocker.Mock(spec=JsonService)
-    mock.read.return_value = sample_resume_json
-    return mock
+def template_service(file_service, json_service):
+    return TemplateService(file_service, json_service)
+
+
+@pytest.fixture
+def json_service(file_service, sample_resume_json, mocker) -> JsonService:
+    service = JsonService(file_service)
+    mocker.patch.object(service, "read", return_value=sample_resume_json)
+    return service
