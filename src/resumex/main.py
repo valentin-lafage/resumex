@@ -3,6 +3,7 @@ import logging
 import logging.config
 
 import resumex.core.cli.template
+import resumex.core.cli.xp
 
 from resumex.config import Paths
 from resumex.core.cli import cli

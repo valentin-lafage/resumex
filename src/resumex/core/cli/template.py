@@ -20,7 +20,7 @@ def ls(provider: ServiceProvider):
 def render(provider: ServiceProvider, template: str, json: click.File):
     provider.backup_service.backup()
     if json is not None:
-        provider.json_service.write(json)
+        provider.json_service.copy(json)
 
     if template.isnumeric():
         try:
