@@ -1,26 +1,60 @@
 import click
 
+from dataclasses import dataclass
+from rich.console import Console
+from rich.table import Table
+from rich.padding import Padding
+
 from resumex.core.cli import cli
 from resumex.core.di import ServiceProvider
+from resumex.core.services import BackupService, JsonService, TemplateService
 from resumex.templates.template import Template
 
 
-@cli.command(help="List available templates")
+@dataclass
+class Context:
+    console: Console
+    json_service: JsonService
+    backup_service: BackupService
+    template_service: TemplateService
+
+
+@cli.group
+@click.pass_context
+def template(ctx):
+    service_provider = ServiceProvider.get_instance()
+    ctx.obj = Context(
+        console=Console(),
+        json_service=service_provider.json_service,
+        backup_service=service_provider.backup_service,
+        template_service=service_provider.template_service,
+    )
+
+
+@template.command(help="List available templates")
 @click.pass_obj
-def ls(provider: ServiceProvider):
-    templates = provider.template_service.ls()
+def ls(ctx: Context):
+    def construct_table() -> Table:
+        table = Table(title="Templates")
+        table.add_column("Index")
+        table.add_column("Name")
+        return table
+
+    table: Table = construct_table()
+    templates = ctx.template_service.ls()
     for i, item in enumerate(templates):
-        click.echo(f"[{i}] — {click.style(item, bold=True)}")
+        table.add_row(str(i), f"[bold cyan]{item}[/bold cyan]")
+    ctx.console.print(Padding(table, pad=(1, 0, 0, 4)))
 
 
-@cli.command(help="Process the given LaTeX template")
+@template.command(help="Process the given LaTeX template")
 @click.argument("template")
 @click.option("--json", type=click.File("rb"))
 @click.pass_obj
-def render(provider: ServiceProvider, template: str, json: click.File):
-    provider.backup_service.backup()
+def render(ctx: Context, template: str, json: click.File):
+    ctx.backup_service.backup()
     if json is not None:
-        provider.json_service.copy(json)
+        ctx.json_service.copy(json)
 
     if template.isnumeric():
         try:
@@ -34,4 +68,4 @@ def render(provider: ServiceProvider, template: str, json: click.File):
         except ValueError:
             raise click.BadParameter(f"template '{template}' does not exist")
 
-    provider.template_service.render(template)
+    ctx.template_service.render(template)
