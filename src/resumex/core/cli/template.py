@@ -1,34 +1,15 @@
 import click
 
-from dataclasses import dataclass
-from rich.console import Console
 from rich.table import Table
 from rich.padding import Padding
 
-from resumex.core.cli import cli
-from resumex.core.di import ServiceProvider
-from resumex.core.services import BackupService, JsonService, TemplateService
+from resumex.core.cli import cli, Context
 from resumex.templates.template import Template
 
 
-@dataclass
-class Context:
-    console: Console
-    json_service: JsonService
-    backup_service: BackupService
-    template_service: TemplateService
-
-
-@cli.group
-@click.pass_context
-def template(ctx):
-    service_provider = ServiceProvider.get_instance()
-    ctx.obj = Context(
-        console=Console(),
-        json_service=service_provider.json_service,
-        backup_service=service_provider.backup_service,
-        template_service=service_provider.template_service,
-    )
+@cli.group()
+def template():
+    pass
 
 
 @template.command(help="List available templates")

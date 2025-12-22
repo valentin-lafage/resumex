@@ -1,7 +1,6 @@
 import click
 
 from datetime import date
-from dataclasses import dataclass
 from rich import print as rprint
 from rich.console import Console
 from rich.table import Table
@@ -9,28 +8,13 @@ from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.padding import Padding
 
-from resumex.core.cli import cli
-from resumex.core.di import ServiceProvider
-from resumex.core.services import BackupService, JsonService
+from resumex.core.cli import cli, Context
 from resumex.core.models import Company, Experience
 
 
-@dataclass(frozen=True)
-class Context:
-    console: Console
-    json_service: JsonService
-    backup_service: BackupService
-
-
 @cli.group()
-@click.pass_context
-def xp(ctx):
-    service_provider = ServiceProvider.get_instance()
-    ctx.obj = Context(
-        console=Console(),
-        json_service=service_provider.json_service,
-        backup_service=service_provider.backup_service,
-    )
+def xp():
+    pass
 
 
 @xp.command()
